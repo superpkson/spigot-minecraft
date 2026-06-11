@@ -5,10 +5,11 @@ RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastS
 RUN java -jar BuildTools.jar --final-name server.jar
 RUN rm -r BuildData BuildTools.jar BuildTools.log.txt Bukkit CraftBukkit Spigot
 
-VOLUME ["/opt/mc"]
+VOLUME ["/mnt/minecraft"]
 EXPOSE 25565
-WORKDIR /opt/mc
+WORKDIR /mnt/minecraft
 
-RUN echo "eula=true" >> /opt/mc/eula.txt
+RUN echo "eula=true" >> /mnt/minecraft/eula.txt
 
-CMD ["java","-Xmx1G","-Xms1G","-XX:+UseG1GC","-jar","/server.jar","nogui"]
+ENTRYPOINT ["java"]
+CMD ["-Xmx4G","-Xms4G","-XX:+UseG1GC","-jar","/server.jar","nogui"]
