@@ -15,13 +15,6 @@ on:
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
-  
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Package tag'
-        required: false
-        default: 'hotfix'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -91,8 +84,10 @@ jobs:
           cache-to: type=gha,mode=max
           
       - name: Remove untagged packages
+        if: github.event_name != 'pull_request'
         uses: actions/delete-package-versions@v5
         with:
           package-name: 'spigot-minecraft'
           package-type: 'container'
           delete-only-untagged-versions: true
+        continue-on-error: true
